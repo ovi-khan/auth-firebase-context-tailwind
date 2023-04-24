@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { authContext } from "../../Providers/AuthProviders";
 
 const Header = () => {
+  const { user, logOut } = useContext(authContext)
+  const handleLogOut = () => {
+    logOut()
+    .then( () => {})
+    .catch( error => {
+      console.error(error)
+    })
+  }
   return (
     <div>
-      <div className="px-10 navbar bg-base-100 bg-red-700">
+      <div className="px-10 navbar bg-base-100 bg-green-200">
         <div className="flex-1">
           <a className="normal-case text-xl">Auth Master</a>
         </div>
@@ -13,6 +22,12 @@ const Header = () => {
             <li>
               <Link to='/'>Home</Link>
             </li>
+            {user && <li>
+              <Link to='/profile'>Profile</Link>
+            </li>}
+            <li>
+              <Link to='/orders'>Orders</Link>
+            </li>
             <li>
               <Link to='register'>Register</Link>
             </li>
@@ -20,6 +35,12 @@ const Header = () => {
               <Link to='login'>Login</Link>
             </li>
           </ul>
+          {
+            user ? <>
+            <span>{user.email}</span>
+            <button onClick={handleLogOut} className="btn btn-outline btn-green">Sign out</button>
+            </> : <Link className="btn btn-primary text-red-600 font-bold" to='/login'>Login</Link>
+          }
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
